@@ -1,3 +1,191 @@
-hi
-my name is dn
-ata
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="utf-8" />
+  <title>GOLROOD</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --main:#009688;
+      --main-dark:#00796b;
+    }
+
+    body{
+      direction: rtl;
+      margin:0;
+      font-family: "Tahoma","Vazirmatn",sans-serif;
+      background: linear-gradient(to bottom,#e0f7fa,#ffffff);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:30px;
+    }
+
+    .container{
+      width:100%;
+      max-width:720px;
+      background: rgba(255,255,255,0.92);
+      border-radius:16px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.12);
+      padding:36px;
+      text-align:center;
+    }
+
+    #sigolText{
+      font-size:64px;
+      color: #00796b;
+      margin:0 0 26px 0;
+      user-select:none;
+    }
+
+    img{
+      width:100%;
+      border-radius:14px;
+      box-shadow:0 6px 18px rgba(0,0,0,0.12);
+      transform: scale(0.85);
+      opacity:0;
+      transition: transform 450ms ease, opacity 450ms ease;
+      margin-bottom:30px;
+    }
+
+    .button-group{
+      display:flex;
+      gap:16px;
+      justify-content:space-between;
+      max-width:520px;
+      margin:0 auto;
+      opacity:0;
+      pointer-events:none;
+      transition: opacity 260ms ease;
+    }
+
+    .button-group button{
+      flex:1;
+      min-height:64px;
+      padding:12px 18px;
+      font-size:20px;
+      border-radius:12px;
+      border: none;
+      background: var(--main);
+      color:#fff;
+      cursor:pointer;
+      transition: background 200ms ease, transform 120ms ease;
+      line-height:1;
+    }
+
+    .button-group button:hover{ background: var(--main-dark); transform: translateY(-2px); }
+
+    .active img{ opacity:1; transform: scale(1); }
+    .active .button-group{ opacity:1; pointer-events:auto; }
+
+    #stopButton{ display:none; }
+
+    /* متن پایین صفحه */
+    .footer-text{
+      margin-top:24px;
+      font-size:18px;
+      color:#444;
+      font-weight:500;
+    }
+
+    @media (max-width:420px){
+      #sigolText{ font-size:48px; margin-bottom:18px; }
+      .button-group button{ min-height:56px; font-size:18px; padding:10px 12px; }
+      .container{ padding:24px; }
+      .footer-text{ font-size:16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1 id="sigolText">GOLROOD</h1>
+
+    <img id="heroImg" src="https://ata116395-crypto.github.io/sigol01/img.jpg" alt="GOLROOD">
+
+    <div class="button-group" id="buttonGroup">
+      <button id="continueButton" onclick="continueAudio()">ادامه‌ی صدا</button>
+      <button id="playButton" onclick="playAudio()">شنيدن صدا</button>
+      <button id="stopButton" onclick="stopAudio()">توقف صدا</button>
+      <button id="restartButton" onclick="restartAudio()">شروع مجدد</button>
+    </div>
+
+    <!-- متن اضافه شده -->
+    <p class="footer-text">از طرف خانم بیات</p>
+  </div>
+
+  <audio id="audio">
+    <source src="https://ata116395-crypto.github.io/sigol01/music.mp3" type="audio/mpeg">
+    مرورگر شما از پخش صدا پشتیبانی نمی‌کند.
+  </audio>
+
+  <script>
+    const container = document.querySelector('.container');
+    const buttonGroup = document.getElementById('buttonGroup');
+    const heroImg = document.getElementById('heroImg');
+    const playButton = document.getElementById('playButton');
+    const stopButton = document.getElementById('stopButton');
+    const continueButton = document.getElementById('continueButton');
+    const restartButton = document.getElementById('restartButton');
+    const audio = document.getElementById('audio');
+
+    let pauseTime = 0;
+
+    setTimeout(() => {
+      container.classList.add('active');
+      playButton.style.display = 'inline-block';
+      stopButton.style.display = 'none';
+      continueButton.style.display = 'none';
+      restartButton.style.display = 'none';
+    }, 3000);
+
+    function playAudio(){
+      audio.currentTime = pauseTime || 0;
+      audio.play().catch(()=>{});
+      playButton.style.display = 'none';
+      stopButton.style.display = 'inline-block';
+      continueButton.style.display = 'none';
+      restartButton.style.display = 'none';
+    }
+
+    function stopAudio(){
+      audio.pause();
+      pauseTime = audio.currentTime;
+      playButton.style.display = 'none';
+      stopButton.style.display = 'none';
+      continueButton.style.display = 'inline-block';
+      restartButton.style.display = 'inline-block';
+    }
+
+    function continueAudio(){
+      audio.currentTime = pauseTime || 0;
+      audio.play();
+      playButton.style.display = 'none';
+      stopButton.style.display = 'inline-block';
+      continueButton.style.display = 'none';
+      restartButton.style.display = 'none';
+    }
+
+    function restartAudio(){
+      pauseTime = 0;
+      audio.currentTime = 0;
+      audio.play();
+      playButton.style.display = 'none';
+      stopButton.style.display = 'inline-block';
+      continueButton.style.display = 'none';
+      restartButton.style.display = 'none';
+    }
+
+    audio.addEventListener('ended', () => {
+      playButton.style.display = 'inline-block';
+      playButton.textContent = 'شنيدن دوباره';
+      playButton.disabled = false;
+      stopButton.style.display = 'none';
+      continueButton.style.display = 'none';
+      restartButton.style.display = 'inline-block';
+      pauseTime = 0;
+    });
+  </script>
+</body>
+</html>
